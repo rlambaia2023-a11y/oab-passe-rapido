@@ -23,7 +23,7 @@ estava neste export. Nesse caso, publique o app no Base44 e exporte de novo
   - `/questoes` — banco com filtro por matéria, busca e gabarito revelável
   - `/progresso` — acertos por matéria, histórico de simulados, limpar progresso
   - `/login`, `/register`, `/forgot-password`, `/reset-password` — conta local
-- Banco inicial: 27 questões de revisão em 9 matérias, em `src/data/questoes.js`.
+- Banco após ampliação: 54 questões de revisão em 9 matérias, em `src/data/questoes.js`.
   NÃO são provas oficiais da OAB/FGV. Para ampliar, edite esse arquivo no mesmo formato.
 
 ## Rodar

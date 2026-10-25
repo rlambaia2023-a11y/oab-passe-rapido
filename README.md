@@ -24,7 +24,7 @@ npm start       # serve dist/ na porta 8080 (ou $PORT)
 
 ## Banco de questões
 
-`src/data/questoes.js` — 27 questões de revisão em 9 matérias. Para ampliar,
+`src/data/questoes.js` — 54 questões de revisão em 9 matérias. Para ampliar,
 edite esse arquivo seguindo o mesmo formato (id, materia, enunciado,
 alternativas, correta, explicacao).
 
