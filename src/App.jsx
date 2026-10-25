@@ -12,6 +12,7 @@ import Revisao from '@/pages/Revisao';
 import Questoes from '@/pages/Questoes';
 import Progresso from '@/pages/Progresso';
 import AnaliseProvas from '@/pages/AnaliseProvas';
+import CruzamentoProvas from '@/pages/CruzamentoProvas';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -47,6 +48,7 @@ const AuthenticatedApp = () => {
       <Route path="/questoes" element={<Questoes />} />
       <Route path="/progresso" element={<Progresso />} />
       <Route path="/analise" element={<AnaliseProvas />} />
+      <Route path="/cruzamento" element={<CruzamentoProvas />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

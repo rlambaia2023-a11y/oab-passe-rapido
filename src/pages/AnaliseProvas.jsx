@@ -41,6 +41,13 @@ export default function AnaliseProvas() {
         nosso banco são de revisão e não são provas oficiais da OAB/FGV.
       </p>
 
+      <Card className="mb-5">
+        <CardContent className="pt-5 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm leading-relaxed"><strong>Nova página:</strong> o cruzamento de todas as provas, com as matérias e os temas mais cobrados e as prováveis da próxima edição, está na página Cruzamento.</p>
+          <Link to="/cruzamento"><Button>Ver Cruzamento</Button></Link>
+        </CardContent>
+      </Card>
+
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm mb-5 leading-relaxed">
         <strong>Leia isto antes de usar:</strong> a FGV não publica ranking oficial por subtema e o
         edital não fixa quantas questões cada matéria terá. Os números e temas abaixo são o padrão

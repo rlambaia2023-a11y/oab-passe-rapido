@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, Home, ListChecks, BarChart3, Menu, X, Cloud, LogOut, Target, Filter } from 'lucide-react'
+import { BookOpen, Home, ListChecks, BarChart3, Menu, X, Cloud, LogOut, Target, Filter, Crosshair } from 'lucide-react'
 import { getCloudEmail, isCloud, logoutCloud } from '@/lib/nuvem'
 
 const LINKS = [
@@ -10,6 +10,7 @@ const LINKS = [
   { to: '/questoes', label: 'Questões', icon: BookOpen },
   { to: '/progresso', label: 'Progresso', icon: BarChart3 },
   { to: '/analise', label: 'Análise de Provas', icon: Filter },
+  { to: '/cruzamento', label: 'Cruzamento', icon: Crosshair },
 ]
 
 export default function Layout({ children }) {
