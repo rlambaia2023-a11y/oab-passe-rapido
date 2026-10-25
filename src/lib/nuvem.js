@@ -78,6 +78,10 @@ export function mesclarProgresso(cloudAnswers, cloudHistory) {
   return { answers, history: mergedHistory }
 }
 
+export async function limparNuvem() {
+  if (!isCloud()) return null
+  return api('/api/progress', 'DELETE')
+}
 export async function syncProgressToCloud() {
   if (!isCloud()) return null
   return api('/api/progress', 'PUT', { answers: lerRespostas(), history: lerHistorico() })

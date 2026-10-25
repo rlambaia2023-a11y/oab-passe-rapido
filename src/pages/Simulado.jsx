@@ -3,8 +3,8 @@ import { useSearchParams, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MATERIAS, QUESTOES } from '@/data/questoes'
-import { registrarSimulado } from '@/lib/progresso'
-import { syncProgressToCloud } from '@/lib/nuvem'
+import { lerRespostas, registrarSimulado } from '@/lib/progresso'
+import { isCloud, syncProgressFromCloud, syncProgressToCloud } from '@/lib/nuvem'
 import Layout from '@/components/Layout'
 import { ArrowLeft, ArrowRight, RotateCcw, Trophy, Flag, Timer } from 'lucide-react'
 
@@ -40,11 +40,29 @@ export default function Simulado() {
   const [tempoRestante, setTempoRestante] = useState(0)
   const [provaRespostas, setProvaRespostas] = useState({})
   const [marcadas, setMarcadas] = useState([])
+  // Nunca repetir: só entram no sorteio questões que este usuário ainda
+  // não respondeu (em simulado, prova ou revisão). A resposta é guardada
+  // por conta na nuvem quando há login, e no navegador quando não há.
+  // A revisão de erros é a única exceção, e é de propósito: ela repete
+  // só o que o usuário errou, para corrigir.
+  const [respostasConhecidas, setRespostasConhecidas] = useState(() => lerRespostas())
 
-  const disponiveis = useMemo(() => {
-    const base = materia === 'Todas' ? QUESTOES : QUESTOES.filter((q) => q.materia === materia)
-    return base
+  // Com conta na nuvem, baixa o histórico de outros aparelhos antes de
+  // montar o sorteio, para não repetir questão feita em outro aparelho.
+  useEffect(() => {
+    if (!isCloud()) return
+    syncProgressFromCloud()
+      .then(() => setRespostasConhecidas(lerRespostas()))
+      .catch(() => {})
+  }, [])
+
+  const baseSelecao = useMemo(() => {
+    return materia === 'Todas' ? QUESTOES : QUESTOES.filter((q) => q.materia === materia)
   }, [materia])
+  const disponiveis = useMemo(() => {
+    return baseSelecao.filter((q) => !Object.prototype.hasOwnProperty.call(respostasConhecidas, q.id))
+  }, [baseSelecao, respostasConhecidas])
+  const jaRespondidasSelecao = baseSelecao.length - disponiveis.length
 
   function guardarRevisao(respostasBool, listaQ) {
     try {
@@ -88,6 +106,7 @@ export default function Simulado() {
     const acertos = Object.values(boolMap).filter(Boolean).length
     setRespostas(boolMap)
     registrarSimulado({ materia: `${materia} (Prova)`, total: lista.length, acertos, respostas: boolMap })
+    setRespostasConhecidas(lerRespostas())
     guardarRevisao(boolMap, lista)
     aposSalvar()
     setFinalizado(true)
@@ -109,6 +128,7 @@ export default function Simulado() {
     if (indice + 1 >= lista.length) {
       const acertos = Object.values(novas).filter(Boolean).length
       registrarSimulado({ materia, total: lista.length, acertos, respostas: novas })
+      setRespostasConhecidas(lerRespostas())
       guardarRevisao(novas, lista)
       aposSalvar()
       setFinalizado(true)
@@ -138,7 +158,7 @@ export default function Simulado() {
                 {[5, 10, 20].map((n) => (
                   <Button key={n} variant={quantidade === n ? 'default' : 'outline'} onClick={() => setQuantidade(n)}>{n}</Button>
                 ))}
-                <Button variant={quantidade === 999 ? 'default' : 'outline'} onClick={() => setQuantidade(999)}>Todas ({disponiveis.length})</Button>
+                <Button variant={quantidade === 999 ? 'default' : 'outline'} onClick={() => setQuantidade(999)}>Todas as inéditas ({disponiveis.length})</Button>
               </div>
             </div>
             <div>
@@ -164,10 +184,17 @@ export default function Simulado() {
                 </div>
               </div>
             )}
-            <p className="text-sm text-muted-foreground">
-              {disponiveis.length} questões disponíveis nesta seleção.
-            </p>
-            <Button size="lg" onClick={comecar} disabled={!disponiveis.length}>Começar {modo === 'prova' ? 'prova' : 'simulado'}</Button>
+            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-sm space-y-1">
+              <p><strong>Sem repetição:</strong> nesta seleção há {baseSelecao.length} questões no total, {disponiveis.length} ainda inéditas para você e {jaRespondidasSelecao} já respondidas. O sorteio usa só as inéditas, então nenhuma questão volta num novo simulado ou prova.</p>
+              <p className="text-slate-600">A única exceção é a Revisão de erros, que repete de propósito só o que você errou. Se pedir mais questões do que as inéditas, o simulado usa todas as inéditas que restam.</p>
+              {disponiveis.length === 0 && (
+                <p className="text-slate-700">Você já respondeu todas as questões desta seleção. Revise seus erros na página Revisão ou, se quiser recomeçar do zero, limpe o progresso na página Progresso.</p>
+              )}
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              <Button size="lg" onClick={comecar} disabled={!disponiveis.length}>Começar {modo === 'prova' ? 'prova' : 'simulado'}</Button>
+              {disponiveis.length === 0 && <Link to="/revisao"><Button size="lg" variant="outline">Revisar meus erros</Button></Link>}
+            </div>
           </CardContent>
         </Card>
       </Layout>

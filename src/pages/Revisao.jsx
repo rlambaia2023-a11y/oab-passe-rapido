@@ -152,6 +152,7 @@ export default function Revisao() {
       <h1 className="text-2xl font-bold mb-2 flex items-center gap-2"><Target className="w-6 h-6 text-red-600" /> Revisão de erros</h1>
       <p className="text-sm text-muted-foreground mb-5">
         Aqui só entram questões que você realmente errou. Quando acerta na revisão, ela sai da lista.
+        Esta é a única exceção ao nunca-repetir: simulados e provas novos usam só questões inéditas, mas a revisão repete de propósito o que você errou.
         {recentes.length > 0 && ' Abaixo, primeiro as do seu último simulado/prova.'}
       </p>
 

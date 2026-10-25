@@ -22,6 +22,7 @@ export default function Home() {
             <Link to="/simulado"><Button size="lg" className="bg-white text-emerald-900 hover:bg-emerald-50 shadow"><Play className="w-4 h-4 mr-2" /> Começar simulado</Button></Link>
             <Link to="/questoes"><Button size="lg" variant="outline" className="text-white border-emerald-300 hover:bg-emerald-700 hover:text-white"><BookOpen className="w-4 h-4 mr-2" /> Ver questões</Button></Link>
             <Link to="/revisao"><Button size="lg" variant="outline" className="text-white border-emerald-300 hover:bg-emerald-700 hover:text-white">Revisar meus erros</Button></Link>
+            <Link to="/analise"><Button size="lg" variant="outline" className="text-white border-emerald-300 hover:bg-emerald-700 hover:text-white">Análise de provas: como passar</Button></Link>
           </div>
         </div>
 

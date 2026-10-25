@@ -148,6 +148,14 @@ async function handleApi(req, res, url) {
     if (req.method === 'GET' && pathname === '/api/progress') {
       return json(res, 200, { answers: user.progress.answers || {}, history: user.progress.history || [] })
     }
+    if (req.method === 'DELETE' && pathname === '/api/progress') {
+      // Limpar progresso na nuvem: usado quando o usuário zera o histórico
+      // para recomeçar. Sem isso, o próximo sync devolveria os dados antigos
+      // e o nunca-repetir voltaria a considerar as questões já feitas.
+      user.progress = { answers: {}, history: [] }
+      saveDb(db)
+      return json(res, 200, { answers: {}, history: [] })
+    }
     if (req.method === 'PUT' && pathname === '/api/progress') {
       const body = await readBody(req)
       const answers = { ...(user.progress.answers || {}), ...cleanAnswers(body.answers) }

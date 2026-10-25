@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { estatisticas, lerHistorico, limparProgresso } from '@/lib/progresso'
-import { isCloud, syncProgressFromCloud } from '@/lib/nuvem'
+import { isCloud, limparNuvem, syncProgressFromCloud } from '@/lib/nuvem'
 import Layout from '@/components/Layout'
 
 export default function Progresso() {
@@ -22,8 +22,16 @@ export default function Progresso() {
       .catch(() => setNuvemMsg('Não foi possível sincronizar com a nuvem agora. Mostrando o progresso deste navegador.'))
   }, [])
 
-  function limpar() {
-    if (!window.confirm('Limpar todo o progresso salvo neste navegador?')) return
+  async function limpar() {
+    const naNuvem = isCloud()
+    if (!window.confirm(naNuvem
+      ? 'Limpar todo o progresso, inclusive na nuvem? Depois disso, as questões voltam a ser inéditas para você.'
+      : 'Limpar todo o progresso salvo neste navegador? Depois disso, as questões voltam a ser inéditas para você.')) return
+    // Limpar a nuvem primeiro: se só limpasse o navegador, o próximo sync
+    // devolveria o histórico antigo e o nunca-repetir voltaria a valer.
+    if (naNuvem) {
+      try { await limparNuvem() } catch { /* segue limpando o navegador */ }
+    }
     limparProgresso()
     setStats(estatisticas())
     setHistorico([])
@@ -70,7 +78,8 @@ export default function Progresso() {
           )}
         </CardContent>
       </Card>
-      <Button variant="outline" onClick={limpar}>Limpar progresso deste navegador</Button>
+      <Button variant="outline" onClick={limpar}>Limpar todo o progresso{isCloud() ? ' (navegador e nuvem)' : ' deste navegador'}</Button>
+      <p className="text-xs text-muted-foreground mt-2">Limpar é a única forma de uma questão voltar a aparecer num simulado novo: sem limpar, questão respondida não se repete.</p>
     </Layout>
   )
 }

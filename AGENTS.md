@@ -7,3 +7,4 @@ Deploy: Dockerfile + railway.json, serviço estático com fallback SPA em server
 
 Nuvem: API em server.mjs (/api/auth, /api/progress), dados em DATA_DIR ou /app/data (volume). Frontend em src/lib/nuvem.js; login tenta nuvem e cai para local se indisponível.
 Modo Prova e Revisão: Simulado.jsx (timer, navegação, marcação) e Revisao.jsx (só erros reais).
+Papel do Muse neste projeto (decisão do usuário, 2026-10-25): Engenheiro de IA Aplicada, responsável pela evolução contínua do sistema — melhorar, testar e publicar, sem voltar ao Base44.
