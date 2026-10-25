@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import Home from '@/pages/Home';
 import Simulado from '@/pages/Simulado';
+import Revisao from '@/pages/Revisao';
 import Questoes from '@/pages/Questoes';
 import Progresso from '@/pages/Progresso';
 import Login from '@/pages/Login';
@@ -41,6 +42,7 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/simulado" element={<Simulado />} />
+      <Route path="/revisao" element={<Revisao />} />
       <Route path="/questoes" element={<Questoes />} />
       <Route path="/progresso" element={<Progresso />} />
       <Route path="/login" element={<Login />} />

@@ -9,6 +9,16 @@ export function lerRespostas() {
 export function lerHistorico() {
   try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]') } catch { return [] }
 }
+export function salvarRespostas(respostas) {
+  localStorage.setItem(ANSWERS_KEY, JSON.stringify(respostas || {}))
+}
+export function salvarHistorico(historico) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify((historico || []).slice(0, 100)))
+}
+export function questoesErradas() {
+  const respostas = lerRespostas()
+  return QUESTOES.filter((q) => respostas[q.id] === false)
+}
 export function registrarSimulado({ materia, total, acertos, respostas }) {
   const atuais = lerRespostas()
   Object.entries(respostas).forEach(([id, certa]) => { atuais[id] = certa })

@@ -88,5 +88,16 @@
 
   body {
     @apply bg-background text-foreground font-body;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Visual e celular: alvos de toque maiores e leitura mais confortável. */
+@media (max-width: 640px) {
+  button {
+    min-height: 44px;
+  }
+  input, select, textarea {
+    font-size: 16px;
   }
 }

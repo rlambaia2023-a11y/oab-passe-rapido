@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { loginCloud, isCloudUnavailable } from "@/lib/nuvem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +23,14 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      // Primeiro a nuvem (mesma conta em qualquer aparelho). Se a API não
+      // estiver disponível (ex.: rodando só o Vite em dev), cai para a conta local.
+      try {
+        await loginCloud(email, password);
+      } catch (cloudErr) {
+        if (!isCloudUnavailable(cloudErr)) throw cloudErr
+        await base44.auth.loginViaEmailPassword(email, password);
+      }
       window.location.href = returnTo;
     } catch (err) {
       setError(err.message || "E-mail ou senha inválidos");
@@ -35,7 +43,7 @@ export default function Login() {
     <AuthLayout
       icon={LogIn}
       title="Entrar"
-      subtitle="Conta local, salva apenas neste navegador"
+      subtitle="Conta na nuvem: seu progresso vale em qualquer aparelho. Sem API, cai para conta local."
       footer={
         <>
           Não tem conta?{" "}

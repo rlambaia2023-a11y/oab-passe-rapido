@@ -1,12 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { estatisticas, lerHistorico, limparProgresso } from '@/lib/progresso'
+import { isCloud, syncProgressFromCloud } from '@/lib/nuvem'
 import Layout from '@/components/Layout'
 
 export default function Progresso() {
   const [stats, setStats] = useState(() => estatisticas())
   const [historico, setHistorico] = useState(() => lerHistorico())
+  const [nuvemMsg, setNuvemMsg] = useState('')
+
+  // Com conta na nuvem, baixa e mescla o progresso de outros aparelhos.
+  useEffect(() => {
+    if (!isCloud()) return
+    syncProgressFromCloud()
+      .then(() => {
+        setStats(estatisticas())
+        setHistorico(lerHistorico())
+        setNuvemMsg('Progresso sincronizado com a nuvem.')
+      })
+      .catch(() => setNuvemMsg('Não foi possível sincronizar com a nuvem agora. Mostrando o progresso deste navegador.'))
+  }, [])
 
   function limpar() {
     if (!window.confirm('Limpar todo o progresso salvo neste navegador?')) return
@@ -17,7 +31,8 @@ export default function Progresso() {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-bold mb-4">Meu progresso</h1>
+      <h1 className="text-2xl font-bold mb-2">Meu progresso</h1>
+      {nuvemMsg && <p className="text-sm text-muted-foreground mb-4">{nuvemMsg}</p>}
       <div className="grid grid-cols-3 gap-3 mb-5">
         <Card><CardContent className="pt-5"><p className="text-2xl font-bold">{stats.respondidas}</p><p className="text-sm text-muted-foreground">Respondidas</p></CardContent></Card>
         <Card><CardContent className="pt-5"><p className="text-2xl font-bold">{stats.percentual}%</p><p className="text-sm text-muted-foreground">Acertos</p></CardContent></Card>

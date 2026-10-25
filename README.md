@@ -10,7 +10,9 @@ localStorage deste navegador.
 - `/` Início — estatísticas, matérias, atalhos
 - `/simulado` — simulado por matéria (5, 10, 20 ou todas), nota e revisão com explicação
 - `/questoes` — banco com filtro por matéria, busca e gabarito revelável
-- `/progresso` — acertos por matéria, histórico de simulados
+- `/progresso` — acertos por matéria, histórico de simulados (sincroniza com a nuvem se houver conta)
+- `/revisao` — só as questões que você errou, com quiz de revisão
+- `/simulado` — modo Estudo e modo Prova (timer, navegação, marcação)
 - `/login`, `/register`, `/forgot-password`, `/reset-password` — conta local (opcional)
 
 ## Rodar localmente
@@ -19,7 +21,14 @@ localStorage deste navegador.
 npm install
 npm run dev     # http://localhost:5173
 npm run build   # gera dist/
-npm start       # serve dist/ na porta 8080 (ou $PORT)
+npm start       # serve dist/ na porta 8080 (ou $PORT) + API /api/*
+
+## Progresso na nuvem
+
+Crie conta em /register ou entre em /login. O servidor guarda contas e
+progresso em DATA_DIR (padrão ./data, ou /app/data se existir).
+Na Railway, monte um volume em /app/data para o progresso sobreviver a
+redeploys; sem volume, ele some a cada novo deploy.
 ```
 
 ## Banco de questões

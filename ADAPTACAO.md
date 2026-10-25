@@ -40,3 +40,17 @@ npm run build # gera dist/ (site estático, dá para publicar na Vercel/Railway)
 - Não é login seguro multiusuário. Para publicar para outras pessoas com
   contas de verdade, o próximo passo é um backend (Node + SQLite/Postgres)
   ou importar o conteúdo real do Base44.
+
+## Novidades (2026-10-25)
+- **Progresso na nuvem**: `server.mjs` agora tem API `/api/auth/*` e `/api/progress`
+  (contas com senha em scrypt + token, dados em JSON em DATA_DIR).
+  Login/cadastro tentam a nuvem primeiro e caem para conta local se a API não
+  estiver disponível. Sem volume na Railway, os dados somem a cada redeploy;
+  com volume montado em `/app/data`, o servidor usa esse diretório sozinho.
+- **Modo Prova**: no Simulado, escolha Prova (timer, navegação livre, marcar
+  para revisar, finalização automática no fim do tempo, sem gabarito durante).
+- **Revisão de erros real** (`/revisao`): só questões que você realmente errou;
+  acertou na revisão, sai da lista. O último simulado/prova deixa seus erros
+  prontos para refazer.
+- **Visual e celular**: menu hamburger no mobile, hero em gradiente, botões
+  com altura mínima de toque, alternativas maiores e timer fixo na prova.

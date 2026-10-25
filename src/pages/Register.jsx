@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { registerCloud, isCloudUnavailable } from "@/lib/nuvem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +26,13 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await base44.auth.register({ email, password });
+      // Primeiro a nuvem. Se a API não estiver disponível, cria conta local.
+      try {
+        await registerCloud(email, password);
+      } catch (cloudErr) {
+        if (!isCloudUnavailable(cloudErr)) throw cloudErr
+        await base44.auth.register({ email, password });
+      }
       window.location.href = safeReturnTo();
     } catch (err) {
       setError(err.message || "Falha ao criar a conta");
@@ -37,8 +44,8 @@ export default function Register() {
   return (
     <AuthLayout
       icon={UserPlus}
-      title="Criar conta local"
-      subtitle="Salva apenas neste navegador"
+      title="Criar conta na nuvem"
+      subtitle="Progresso sincronizado. Sem API disponível, cria conta local neste navegador."
       footer={
         <>
           Já tem conta?{" "}

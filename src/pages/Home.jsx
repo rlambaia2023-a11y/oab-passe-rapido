@@ -11,15 +11,17 @@ export default function Home() {
   return (
     <Layout>
       <div className="space-y-6">
-        <div className="bg-emerald-800 text-white rounded-2xl p-6 md:p-8">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">OAB Passe Rápido</h1>
-          <p className="mt-2 text-emerald-100 max-w-2xl">
-            Revise por matéria, faça simulados e acompanhe seu desempenho.
-            Comece agora: são {QUESTOES.length} questões no banco inicial, em {MATERIAS.length} matérias.
+        <div className="bg-gradient-to-br from-emerald-950 via-emerald-800 to-teal-700 text-white rounded-3xl p-6 md:p-8 shadow-lg">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">OAB Passe Rápido</h1>
+          <p className="mt-2 text-emerald-100 max-w-2xl leading-relaxed">
+            Revise por matéria, faça simulados com timer e revise só o que você errou.
+            Comece agora: são {QUESTOES.length} questões no banco, em {MATERIAS.length} matérias.
+            Com conta, seu progresso vai para a nuvem e vale em outro celular ou computador.
           </p>
           <div className="mt-5 flex gap-3 flex-wrap">
-            <Link to="/simulado"><Button size="lg" className="bg-white text-emerald-900 hover:bg-emerald-50"><Play className="w-4 h-4 mr-2" /> Começar simulado</Button></Link>
+            <Link to="/simulado"><Button size="lg" className="bg-white text-emerald-900 hover:bg-emerald-50 shadow"><Play className="w-4 h-4 mr-2" /> Começar simulado</Button></Link>
             <Link to="/questoes"><Button size="lg" variant="outline" className="text-white border-emerald-300 hover:bg-emerald-700 hover:text-white"><BookOpen className="w-4 h-4 mr-2" /> Ver questões</Button></Link>
+            <Link to="/revisao"><Button size="lg" variant="outline" className="text-white border-emerald-300 hover:bg-emerald-700 hover:text-white">Revisar meus erros</Button></Link>
           </div>
         </div>
 
